@@ -1,0 +1,34 @@
+{
+  "name": "waxing",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "standard",
+    "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore ./node_modules,./test_resources,./nyc_output,./coverage,./vscode,./.babelrc,./package.json,./package-lock.json,./nycrc,./npm-debug.log --copy-files",
+    "test": "npm run build && mocha './dist/src/test.spec.js'",
+    "buildbis": "cm build"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "node-forge": "^0.8.1",
+    "ole-doc": "^0.1.1",
+    "python-struct": "^1.1.1",
+    "xmldom": "^0.1.27"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.6.2",
+    "@babel/node": "^7.6.2",
+    "@babel/preset-env": "^7.6.2",
+    "@babel/register": "^7.6.2",
+    "babel-cli": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "fs-jetpack": "^2.2.2",
+    "mocha": "^6.2.0",
+    "nyc": "^14.1.1",
+    "rimraf": "^3.0.0"
+  }
+}
