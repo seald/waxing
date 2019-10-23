@@ -94,6 +94,8 @@ const parseInfoAgile = (buffer) => {
   const passwordNode = xml.getElementsByTagNameNS('http://schemas.microsoft.com/office/2006/keyEncryptor/password', 'encryptedKey')[0]
   const spinValue = parseInt(passwordNode.getAttribute('spinCount'))
   const encryptedKeyValue = Buffer.from(passwordNode.getAttribute('encryptedKeyValue'), 'base64').toString('binary')
+  const encryptedVerifierHashInput = Buffer.from(passwordNode.getAttribute('encryptedVerifierHashInput'), 'base64').toString('binary')
+  const encryptedVerifierHashValue = Buffer.from(passwordNode.getAttribute('encryptedVerifierHashValue'), 'base64').toString('binary')
   const passwordSalt = Buffer.from(passwordNode.getAttribute('saltValue'), 'base64').toString('binary')
   const passwordHashAlgorithm = passwordNode.getAttribute('hashAlgorithm')
   const passwordKeyBits = parseInt(passwordNode.getAttribute('keyBits'))
@@ -104,7 +106,9 @@ const parseInfoAgile = (buffer) => {
     encryptedKeyValue,
     passwordSalt,
     passwordHashAlgorithm,
-    passwordKeyBits
+    passwordKeyBits,
+    encryptedVerifierHashInput,
+    encryptedVerifierHashValue
   }
 }
 

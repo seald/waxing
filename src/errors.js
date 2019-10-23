@@ -28,5 +28,5 @@ export default class WaxingError extends Error {
 
 for (const key of Object.keys(errors)) {
   WaxingError[key] = errors[key]
-  WaxingError[key].id = 'GO_' + key
+  WaxingError[key].id = 'WA_' + key
 }

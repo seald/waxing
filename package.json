@@ -1,16 +1,20 @@
 {
-  "name": "waxing",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "@seald/waxing",
+  "version": "0.0.1",
+  "description": "Seald OLE document parser",
+  "main": "dist/index.js",
+  "module": "src/index.js",
   "scripts": {
     "lint": "standard",
-    "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore ./node_modules,./test_resources,./nyc_output,./coverage,./vscode,./.babelrc,./package.json,./package-lock.json,./nycrc,./npm-debug.log --copy-files",
-    "test": "npm run build && mocha './dist/src/test.spec.js'",
-    "buildbis": "cm build"
+    "build": "rimraf dist/ && babel src/ --out-dir dist/ --copy-files",
+    "pretest": "npm run lint && npm run build",
+    "test": "mocha './dist/test.spec.js'"
   },
-  "author": "",
-  "license": "ISC",
+  "publishConfig": {
+    "registry": "https://nexus.tardis.seald.io/repository/npm-hosted"
+  },
+  "author": "Seald",
+  "license": "",
   "dependencies": {
     "node-forge": "^0.8.1",
     "ole-doc": "^0.1.1",
@@ -29,6 +33,7 @@
     "fs-jetpack": "^2.2.2",
     "mocha": "^6.2.0",
     "nyc": "^14.1.1",
-    "rimraf": "^3.0.0"
+    "rimraf": "^3.0.0",
+    "standard": "^14.3.1"
   }
 }

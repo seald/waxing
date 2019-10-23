@@ -1,0 +1,30 @@
+stages:
+  - test
+  - deploy
+
+before_script:
+  - echo "//nexus.tardis.seald.io/repository/npm/:_authToken=${AUTH_TOKEN}" > .npmrc
+  - echo "//nexus.tardis.seald.io/repository/npm-hosted/:_authToken=${AUTH_TOKEN}" >> .npmrc
+  - echo "registry=https://nexus.tardis.seald.io/repository/npm/" >> .npmrc
+  - echo "@seald:registry=https://nexus.tardis.seald.io/repository/npm-hosted/" >> .npmrc
+  - echo "always-auth=true" >> .npmrc
+  - npm ci
+
+test:
+  stage: test
+  image: node:10
+  script:
+    - npm run test
+  artifacts:
+    paths:
+      - dist/
+
+
+deploy:
+  stage: deploy
+  script:
+    - npm run build
+    - npm publish
+  only:
+    - tags
+  allow_failure: false

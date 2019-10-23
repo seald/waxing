@@ -23,6 +23,7 @@ export const makeKeyFromPassword = function (password, saltValue, hashAlgorithm,
   })
   aes.update(forge.util.createBuffer(encryptedKeyValue))
   aes.finish()
+  // TODO: verifier le HMAC si il est donné dans les infos
   return aes.output.data
 }
 
@@ -33,6 +34,8 @@ export const decrypt = function (secretKey, keyDataSalt, keyDataHashAlgorithm, b
   let outputBuffer = Buffer.alloc(0)
   const newBuffer = buffer.slice(8, buffer.length)
 
+  // Parallelize chunk decryption
+  // Verify HMAC (encryptedVerifierHashInput, encryptedVerifierHashValue) ?
   for (let i = 0; i <= Math.floor(newBuffer.length / SEGMENT_LENGTH); i++) {
     const saltWithBlockKey = keyDataSalt + struct.pack('<I', i).toString('binary')
     const iv = hashCalc(saltWithBlockKey, keyDataHashAlgorithm)
@@ -41,7 +44,7 @@ export const decrypt = function (secretKey, keyDataSalt, keyDataHashAlgorithm, b
     const aes = forge.cipher.createDecipher('AES-CBC', forge.util.createBuffer(secretKey))
     aes.start({ iv: forge.util.createBuffer(_iv.toString('binary')) })
     aes.update(forge.util.createBuffer(inter.toString('binary')))
-    aes.finish(() => true)
+    aes.finish(() => true) // Forge will not unpad if a callback return true...
     let dec = Buffer.from(aes.output.data, 'binary')
     if (remaining < inter.length) {
       dec = Buffer.from(aes.output.data, 'binary').slice(0, remaining)
