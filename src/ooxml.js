@@ -24,15 +24,15 @@ export const decryptOfficeFile = async (buffer, getPasswordCallback) => {
     const doc = new ole.OleCompoundDoc(buffer)
     const headerBuffer = await OLEStreamToBuffer(doc, 'EncryptionInfo')
     const encryptionType = parseEncryptionType(headerBuffer)
-    if (encryptionType !== 'agile') throw new WaxingError(WaxingError.UNSUPPORTED_ENCRYPTIONINFO)
+    if (encryptionType !== 'agile') throw new WaxingError(WaxingError.UNSUPPORTED_ENCRYPTION_INFO)
     const inputBuffer = await OLEStreamToBuffer(doc, 'EncryptedPackage')
     const info = parseInfoAgile(headerBuffer)
     const password = await getPasswordCallback()
     const outputBuffer = await decrypt(inputBuffer, password, info)
-    if (!isZipFile(outputBuffer)) throw new WaxingError(WaxingError.NOT_A_ZIPFILE)
+    if (!isZipFile(outputBuffer)) throw new WaxingError(WaxingError.INVALID_DECRYPTED_FILE)
     return outputBuffer
   } catch (error) {
-    if (error.message === 'Not a valid compound document.' || error.message === 'Invalid Short Sector Allocation Table') throw new WaxingError(WaxingError.NOT_A_COMPOUND_FILE)
+    if (error.message === 'Not a valid compound document.' || error.message === 'Invalid Short Sector Allocation Table') throw new WaxingError(WaxingError.INVALID_COMPOUND_FILE)
     else throw error
   }
 }
@@ -67,7 +67,7 @@ export const isZipFile = (buffer) => {
 
 const OLEStreamToBuffer = (doc, streamName) => {
   const chunks = []
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const stream = doc.stream(streamName)
     stream.on('data', (chunk) => {
       chunks.push(chunk)

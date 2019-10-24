@@ -21,7 +21,7 @@ describe('Decrypting Password encrypted MS Office file', () => {
 
   it('Ole file (Word) with right password', async function () {
     this.timeout(10000)
-    const input = jetpack.read(wordDoc, 'buffer')
+    const input = await jetpack.readAsync(wordDoc, 'buffer')
     assert.strictEqual(isOLEDoc(input), false)
     const output = await decryptOLEDoc(input, () => 'testtest')
     assert.strictEqual(!isOLEDoc(output), false)
@@ -29,7 +29,7 @@ describe('Decrypting Password encrypted MS Office file', () => {
 
   it('Ole file (Excel) with right password', async function () {
     this.timeout(10000)
-    const input = jetpack.read(excelDoc, 'buffer')
+    const input = await jetpack.readAsync(excelDoc, 'buffer')
     assert.strictEqual(isOLEDoc(input), false)
     const output = await decryptOLEDoc(input, () => 'test')
     assert.strictEqual(!isOLEDoc(output), false)
@@ -37,7 +37,7 @@ describe('Decrypting Password encrypted MS Office file', () => {
 
   it('Ole file (PowerPoint) with right password', async function () {
     this.timeout(10000)
-    const input = jetpack.read(pptDoc, 'buffer')
+    const input = await jetpack.readAsync(pptDoc, 'buffer')
     assert.strictEqual(isOLEDoc(input), false)
     const output = await decryptOLEDoc(input, () => 'test')
     assert.strictEqual(!isOLEDoc(output), false)
@@ -45,23 +45,23 @@ describe('Decrypting Password encrypted MS Office file', () => {
 
   it('Ole file (Word) with wrong password', async function () {
     this.timeout(10000)
-    const input = jetpack.read(wordDoc, 'buffer')
+    const input = await jetpack.readAsync(wordDoc, 'buffer')
     assert.strictEqual(isOLEDoc(input), false)
     await expect(decryptOLEDoc(input, () => 'testtes')).to.be.rejectedWith(Error).and.eventually.satisfy(error => {
-      assert.strictEqual(error.id, 'WA_NOT_A_ZIPFILE')
-      assert.strictEqual(error.code, 'NOT_A_ZIPFILE')
-      assert.strictEqual(error.message, 'Can\'t encrypt with this password')
+      assert.strictEqual(error.id, 'WA_INVALID_DECRYPTED_FILE')
+      assert.strictEqual(error.code, 'INVALID_DECRYPTED_FILE')
+      assert.strictEqual(error.message, 'Decrypted file is not a valide OLE document')
       return true
     })
   })
 
   it.skip('Not an Ole file', async function () {
     this.timeout(10000)
-    const input = jetpack.read(nonEncrypted, 'buffer')
+    const input = await jetpack.readAsync(nonEncrypted, 'buffer')
     assert.strictEqual(!isOLEDoc(input), false)
     await expect(decryptOLEDoc(input, () => 'testtest')).to.be.rejectedWith(Error).and.eventually.satisfy(error => {
-      assert.strictEqual(error.id, 'WA_NOT_A_COMPOUND_FILE')
-      assert.strictEqual(error.code, 'NOT_A_COMPOUND_FILE')
+      assert.strictEqual(error.id, 'WA_INVALID_COMPOUND_FILE')
+      assert.strictEqual(error.code, 'INVALID_COMPOUND_FILE')
       assert.strictEqual(error.message, 'The file is invalid')
       return true
     })

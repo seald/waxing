@@ -13,6 +13,10 @@
   "publishConfig": {
     "registry": "https://nexus.tardis.seald.io/repository/npm-hosted"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.tardis.seald.io/seald/waxing.git"
+  },
   "author": "Seald",
   "license": "",
   "dependencies": {

@@ -19,7 +19,6 @@ test:
     paths:
       - dist/
 
-
 deploy:
   stage: deploy
   script:

@@ -1,17 +1,13 @@
 export const errors = {
-  NOT_A_VALID_OLEFILE: {
-    code: 'NOT_A_VALID_OLEFILE',
-    message: 'The file is not a vaild ole file'
-  },
-  UNSUPPORTED_ENCRYPTIONINFO: {
+  UNSUPPORTED_ENCRYPTION_INFO: {
     code: 'UNSUPPORTED_ENCRYPTIONINFO',
     message: 'This encryptioninfo version is unsupported'
   },
-  NOT_A_ZIPFILE: {
-    code: 'NOT_A_ZIPFILE',
-    message: 'Can\'t encrypt with this password'
+  INVALID_DECRYPTED_FILE: {
+    code: 'INVALID_DECRYPTED_FILE',
+    message: 'Decrypted file is not a valide OLE document'
   },
-  NOT_A_COMPOUND_FILE: {
+  INVALID_COMPOUND_FILE: {
     code: 'NOT_A_COMPOUND_FILE',
     message: 'The file is invalid'
   }
