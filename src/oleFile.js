@@ -202,7 +202,7 @@ class Storage {
   }
 }
 
-class OleCompoundDoc {
+export default class OleCompoundDoc {
   constructor (fileBuffer) {
     this._fileBuffer = fileBuffer
     this.chunks = []
@@ -340,4 +340,3 @@ class OleCompoundDoc {
     return this._rootStorage.stream(streamName)
   }
 }
-exports.OleCompoundDoc = OleCompoundDoc

@@ -1,4 +1,4 @@
-import ole from './oleFile'
+import OleCompoundDoc from './oleFile'
 import struct from 'python-struct'
 import xmldom from 'xmldom'
 import * as ECMA376Agile from './ecma376_agile.js'
@@ -21,7 +21,7 @@ const stringEndArchive = 'PK\u0005\u0006'
 
 export const decryptOfficeFile = async (buffer, getPasswordCallback) => {
   try {
-    const doc = new ole.OleCompoundDoc(buffer)
+    const doc = new OleCompoundDoc(buffer)
     const headerBuffer = await OLEStreamToBuffer(doc, 'EncryptionInfo')
     const encryptionType = parseEncryptionType(headerBuffer)
     if (encryptionType !== 'agile') throw new WaxingError(WaxingError.UNSUPPORTED_ENCRYPTION_INFO)
