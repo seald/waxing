@@ -27,7 +27,7 @@ export const decryptOfficeFile = async (buffer, getPasswordCallback) => {
     if (encryptionType !== 'agile') throw new WaxingError(WaxingError.UNSUPPORTED_ENCRYPTION_INFO)
     const inputBuffer = await OLEStreamToBuffer(doc, 'EncryptedPackage')
     const info = parseInfoAgile(headerBuffer)
-    const password = getPasswordCallback()
+    const password = await getPasswordCallback()
     const outputBuffer = await decrypt(inputBuffer, password, info)
     if (!isZipFile(outputBuffer)) throw new WaxingError(WaxingError.INVALID_DECRYPTED_FILE)
     return outputBuffer
