@@ -67,7 +67,7 @@ export const isZipFile = (buffer) => {
 
 const OLEStreamToBuffer = (doc, streamName) => {
   const chunks = []
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const stream = doc.stream(streamName)
     stream.on('data', (chunk) => {
       chunks.push(chunk)
@@ -75,6 +75,7 @@ const OLEStreamToBuffer = (doc, streamName) => {
     stream.on('end', () => {
       resolve(Buffer.concat(chunks))
     })
+    stream.on('error', (error) => reject(error))
   })
 }
 
