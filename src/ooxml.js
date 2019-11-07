@@ -42,22 +42,13 @@ export const isZipFile = (buffer) => {
   if (newBuffer.length === sizeEndCentDir &&
     newBuffer.slice(0, 4).toString('base64') === Buffer.from(stringEndArchive).toString('base64') &&
     newBuffer.slice(newBuffer.length - 2, newBuffer.length).toString('base64') === Buffer.from('\u0000\u0000').toString('base64')) {
-    const endrec = struct.unpack(structEndArchive, newBuffer)
-    endrec.push(Buffer.from(''))
-    endrec.push(fileSize - sizeEndCentDir)
     return true
   }
   const maxCommentStart = Math.max(fileSize - 65536 - sizeEndCentDir, 0)
   const newBufferBis = newBuffer.slice(0, maxCommentStart)
   const start = newBufferBis.toString('utf8').lastIndexOf(stringEndArchive.toString('utf8'))
-  if (start >= 0) {
-    const raceData = newBufferBis.slice(start, start + sizeEndCentDir)
-    if (raceData.length !== sizeEndCentDir) return false
-    const _endrec = struct.unpack(structEndArchive, raceData)
-    const commentSize = _endrec[_ECD_COMMENT_SIZE]
-    const comment = newBufferBis.slice(start + sizeEndCentDir, start + sizeEndCentDir + commentSize)
-    _endrec.push(comment)
-    _endrec.push(maxCommentStart + start)
+  if (start >= 0 &&
+    !newBufferBis.slice(start, start + sizeEndCentDir).length !== sizeEndCentDir) {
     return true
   }
   return false
