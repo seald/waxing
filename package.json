@@ -1,6 +1,6 @@
 {
   "name": "@seald/waxing",
-  "version": "0.0.3-5",
+  "version": "0.0.3-6",
   "description": "Seald OLE document parser",
   "main": "dist/index.js",
   "module": "src/index.js",
@@ -29,9 +29,7 @@
     "@babel/cli": "^7.7.0",
     "@babel/core": "^7.7.2",
     "@babel/node": "^7.7.0",
-    "@babel/plugin-transform-runtime": "^7.6.2",
     "@babel/preset-env": "^7.7.1",
-    "@babel/runtime": "^7.7.2",
     "centimaitre": "^1.0.3",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
