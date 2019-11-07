@@ -10,7 +10,7 @@ const structEndArchive = '<4s4H2LH'
 const stringEndArchive = 'PK\u0005\u0006'
 
 // magic bytes that should be at the beginning of every OLE file:
-const MAGIC_BYTES = '\xD0\xCF\x11\xE0\xA1\xB1\x1A\xE1'
+const MAGIC_BYTES = Buffer.from('\xD0\xCF\x11\xE0\xA1\xB1\x1A\xE1', 'binary')
 
 export const decryptOfficeFile = async (buffer, getPasswordCallback) => {
   try {
@@ -30,10 +30,7 @@ export const decryptOfficeFile = async (buffer, getPasswordCallback) => {
   }
 }
 
-export const isOLEDoc = (buffer) => {
-  const magicBuffer = Buffer.from(MAGIC_BYTES, 'binary')
-  return buffer.slice(0, magicBuffer.length).equals(magicBuffer)
-}
+export const isOLEDoc = (buffer) => buffer.slice(0, MAGIC_BYTES.length).equals(MAGIC_BYTES)
 
 export const isZipFile = (buffer) => {
   const fileSize = buffer.byteLength
