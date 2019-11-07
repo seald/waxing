@@ -1,6 +1,6 @@
 export const errors = {
   UNSUPPORTED_ENCRYPTION_INFO: {
-    code: 'UNSUPPORTED_ENCRYPTIONINFO',
+    code: 'UNSUPPORTED_ENCRYPTION_INFO',
     message: 'This encryptioninfo version is unsupported'
   },
   INVALID_DECRYPTED_FILE: {
@@ -10,6 +10,10 @@ export const errors = {
   INVALID_COMPOUND_FILE: {
     code: 'NOT_A_COMPOUND_FILE',
     message: 'The file is invalid'
+  },
+  INVALID_ENTRY_FILE: {
+    code: 'INVALID_ENTRY_FILE',
+    message: 'Invalid file'
   }
 }
 

@@ -28,7 +28,6 @@
   "devDependencies": {
     "@babel/cli": "^7.7.0",
     "@babel/core": "^7.7.2",
-    "@babel/node": "^7.7.0",
     "@babel/preset-env": "^7.7.1",
     "centimaitre": "^1.0.3",
     "chai": "^4.2.0",
