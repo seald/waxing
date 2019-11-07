@@ -22,31 +22,31 @@ describe('Decrypting Password encrypted MS Office file', () => {
   it('Ole file (Word) with right password', async function () {
     this.timeout(10000)
     const input = await jetpack.readAsync(wordDoc, 'buffer')
-    assert.strictEqual(isOLEDoc(input), false)
+    assert.strictEqual(isOLEDoc(input), true)
     const output = await decryptOLEDoc(input, () => 'testtest')
-    assert.strictEqual(!isOLEDoc(output), false)
+    assert.strictEqual(isOLEDoc(output), false)
   })
 
   it('Ole file (Excel) with right password', async function () {
     this.timeout(10000)
     const input = await jetpack.readAsync(excelDoc, 'buffer')
-    assert.strictEqual(isOLEDoc(input), false)
+    assert.strictEqual(isOLEDoc(input), true)
     const output = await decryptOLEDoc(input, () => 'test')
-    assert.strictEqual(!isOLEDoc(output), false)
+    assert.strictEqual(isOLEDoc(output), false)
   })
 
   it('Ole file (PowerPoint) with right password', async function () {
     this.timeout(10000)
     const input = await jetpack.readAsync(pptDoc, 'buffer')
-    assert.strictEqual(isOLEDoc(input), false)
+    assert.strictEqual(isOLEDoc(input), true)
     const output = await decryptOLEDoc(input, () => 'test')
-    assert.strictEqual(!isOLEDoc(output), false)
+    assert.strictEqual(isOLEDoc(output), false)
   })
 
   it('Ole file (Word) with wrong password', async function () {
     this.timeout(10000)
     const input = await jetpack.readAsync(wordDoc, 'buffer')
-    assert.strictEqual(isOLEDoc(input), false)
+    assert.strictEqual(isOLEDoc(input), true)
     await expect(decryptOLEDoc(input, () => 'testtes')).to.be.rejectedWith(Error).and.eventually.satisfy(error => {
       assert.strictEqual(error.id, 'WA_INVALID_DECRYPTED_FILE')
       assert.strictEqual(error.code, 'INVALID_DECRYPTED_FILE')
@@ -58,7 +58,7 @@ describe('Decrypting Password encrypted MS Office file', () => {
   it.skip('Not an Ole file', async function () {
     this.timeout(10000)
     const input = await jetpack.readAsync(nonEncrypted, 'buffer')
-    assert.strictEqual(!isOLEDoc(input), false)
+    assert.strictEqual(isOLEDoc(input), true)
     await expect(decryptOLEDoc(input, () => 'testtest')).to.be.rejectedWith(Error).and.eventually.satisfy(error => {
       assert.strictEqual(error.id, 'WA_INVALID_COMPOUND_FILE')
       assert.strictEqual(error.code, 'INVALID_COMPOUND_FILE')
