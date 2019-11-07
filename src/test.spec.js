@@ -55,15 +55,11 @@ describe('Decrypting Password encrypted MS Office file', () => {
     })
   })
 
-  it.skip('Not an Ole file', async function () {
+  it('Not an Ole file', async function () {
     this.timeout(10000)
     const input = await jetpack.readAsync(nonEncrypted, 'buffer')
-    assert.strictEqual(isOLEDoc(input), true)
-    await expect(decryptOLEDoc(input, () => 'testtest')).to.be.rejectedWith(Error).and.eventually.satisfy(error => {
-      assert.strictEqual(error.id, 'WA_INVALID_COMPOUND_FILE')
-      assert.strictEqual(error.code, 'INVALID_COMPOUND_FILE')
-      assert.strictEqual(error.message, 'The file is invalid')
-      return true
-    })
+    assert.strictEqual(isOLEDoc(input), false)
+    const decryptedBuff = await decryptOLEDoc(input, () => 'testtest')
+    assert.strictEqual(input.equals(decryptedBuff), true)
   })
 })
