@@ -1,4 +1,5 @@
 import { isZipFile, decryptOfficeFile } from './ooxml.js'
+import "@babel/polyfill"
 
 export const isOLEDoc = (buffer) => isZipFile(buffer)
 
