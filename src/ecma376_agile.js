@@ -28,8 +28,7 @@ export const makeKeyFromPassword = function (password, saltValue, hashAlgorithm,
 }
 
 export const decrypt = function (secretKey, keyDataSalt, keyDataHashAlgorithm, buffer) {
-  const totalSize = struct.unpack('<I', buffer.slice(0, 4))[0]
-  let remaining = totalSize
+  let remaining = struct.unpack('<I', buffer.slice(0, 4))[0]
   const SEGMENT_LENGTH = 4096
   let outputBuffer = Buffer.alloc(0)
   const newBuffer = buffer.slice(8, buffer.length)

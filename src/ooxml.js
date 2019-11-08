@@ -1,11 +1,9 @@
-import OleCompoundDoc from './oleFile'
+import fileType from 'file-type'
 import struct from 'python-struct'
 import xmldom from 'xmldom'
 import * as ECMA376Agile from './ecma376_agile.js'
 import WaxingError from './errors'
-
-const sizeEndCentDir = struct.sizeOf('<4s4H2LH')
-const stringEndArchive = 'PK\u0005\u0006'
+import OleCompoundDoc from './oleFile'
 
 // magic bytes that should be at the beginning of every OLE file:
 const MAGIC_BYTES = Buffer.from('\xD0\xCF\x11\xE0\xA1\xB1\x1A\xE1', 'binary')
@@ -31,21 +29,8 @@ export const decryptOfficeFile = async (buffer, getPasswordCallback) => {
 export const isOLEDoc = (buffer) => buffer.slice(0, MAGIC_BYTES.length).equals(MAGIC_BYTES)
 
 export const isZipFile = (buffer) => {
-  const fileSize = buffer.length
-  const footer = buffer.slice(fileSize - sizeEndCentDir, fileSize)
-  if (footer.length === sizeEndCentDir &&
-    footer.slice(0, 4).equals(Buffer.from(stringEndArchive)) &&
-    footer.slice(footer.length - 2, footer.length).equals(Buffer.from('\u0000\u0000'))) {
-    return true
-  }
-  const maxCommentStart = Math.max(fileSize - 65536 - sizeEndCentDir, 0)
-  const footerNoComment = footer.slice(0, maxCommentStart)
-  const start = footerNoComment.toString('utf8').lastIndexOf(stringEndArchive)
-  if (start >= 0 &&
-    !footerNoComment.slice(start, start + sizeEndCentDir).length !== sizeEndCentDir) {
-    return true
-  }
-  return false
+  const fileExt = fileType(buffer)
+  return Boolean(fileExt) && ['docx', 'xlsx', 'pptx', 'zip'].includes(fileExt.ext)
 }
 
 const OLEStreamToBuffer = (doc, streamName) => {
