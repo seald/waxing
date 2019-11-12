@@ -1,19 +1,19 @@
 export const errors = {
-  NOT_A_VALID_OLEFILE: {
-    code: 'NOT_A_VALID_OLEFILE',
-    message: 'The file is not a vaild ole file'
-  },
-  UNSUPPORTED_ENCRYPTIONINFO: {
-    code: 'UNSUPPORTED_ENCRYPTIONINFO',
+  UNSUPPORTED_ENCRYPTION_INFO: {
+    code: 'UNSUPPORTED_ENCRYPTION_INFO',
     message: 'This encryptioninfo version is unsupported'
   },
-  NOT_A_ZIPFILE: {
-    code: 'NOT_A_ZIPFILE',
-    message: 'Can\'t encrypt with this password'
+  INVALID_DECRYPTED_FILE: {
+    code: 'INVALID_DECRYPTED_FILE',
+    message: 'Decrypted file is not a valide OLE document'
   },
-  NOT_A_COMPOUND_FILE: {
+  INVALID_COMPOUND_FILE: {
     code: 'NOT_A_COMPOUND_FILE',
     message: 'The file is invalid'
+  },
+  INVALID_ENTRY_FILE: {
+    code: 'INVALID_ENTRY_FILE',
+    message: 'Invalid file'
   }
 }
 
@@ -28,5 +28,5 @@ export default class WaxingError extends Error {
 
 for (const key of Object.keys(errors)) {
   WaxingError[key] = errors[key]
-  WaxingError[key].id = 'GO_' + key
+  WaxingError[key].id = 'WA_' + key
 }
