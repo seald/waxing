@@ -22,7 +22,7 @@ export const makeKeyFromPassword = function (password, saltValue, hashAlgorithm,
     iv: forge.util.createBuffer(saltValue.toString('binary'))
   })
   aes.update(forge.util.createBuffer(encryptedKeyValue))
-  aes.finish()
+  aes.finish(() => true) // Forge will not unpad if a callback return true...
   // TODO: verifier le HMAC si il est donné dans les infos
   return aes.output.data
 }

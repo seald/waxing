@@ -9,10 +9,11 @@ chai.use(chaiAsPromised)
 const { expect, assert } = chai
 
 describe('Decrypting Password encrypted MS Office file', () => {
-  let testResources, wordDoc, excelDoc, pptDoc, nonEncrypted
+  let testResources, wordDoc, excelDoc, pptDoc, nonEncrypted, secretDoc
 
   before('initialize', () => {
     testResources = jetpack.dir('test_resources')
+    secretDoc = testResources.path('secret.docx')
     wordDoc = testResources.path('encrypted.docx')
     excelDoc = testResources.path('encrypted.xlsx')
     pptDoc = testResources.path('encrypted.pptx')
@@ -24,6 +25,14 @@ describe('Decrypting Password encrypted MS Office file', () => {
     const input = await jetpack.readAsync(wordDoc, 'buffer')
     assert.strictEqual(isOLEDoc(input), true)
     const output = await decryptOLEDoc(input, () => 'testtest')
+    assert.strictEqual(isOLEDoc(output), false)
+  })
+
+  it('Ole file long password (test key padding)', async function () {
+    this.timeout(10000)
+    const input = await jetpack.readAsync(secretDoc, 'buffer')
+    assert.strictEqual(isOLEDoc(input), true)
+    const output = await decryptOLEDoc(input, () => 'testpassword')
     assert.strictEqual(isOLEDoc(output), false)
   })
 
