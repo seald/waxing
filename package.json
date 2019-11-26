@@ -1,35 +1,36 @@
 {
-  "name": "@seald/waxing",
+  "name": "waxing",
   "version": "0.1.0",
-  "description": "Seald OLE document parser",
+  "description": "JS package to decrypt password-protected Office documents",
   "main": "dist/index.js",
   "module": "src/index.js",
+  "files": [
+    "dist/*",
+    "!dist/*.spec.js",
+    "src/*",
+    "!src/*.spec.js"
+  ],
   "scripts": {
     "lint": "standard",
     "build": "rimraf dist/ && babel src/ --out-dir dist/ --copy-files",
-    "pretest": "npm run build",
+    "pretest": "npm run lint && npm run build",
     "test": "mocha './dist/test.spec.js'"
-  },
-  "publishConfig": {
-    "registry": "https://nexus.tardis.seald.io/repository/npm-hosted"
   },
   "repository": {
     "type": "git",
-    "url": "https://gitlab.tardis.seald.io/seald/waxing.git"
+    "url": "https://github.com/seald/waxing.git"
   },
   "author": "Seald",
-  "license": "",
+  "license": "MIT",
   "dependencies": {
     "file-type": "^12.4.0",
     "node-forge": "^0.9.1",
-    "ole-doc": "^0.1.1",
-    "python-struct": "^1.1.2",
     "xmldom": "^0.1.27"
   },
   "devDependencies": {
-    "@babel/cli": "^7.7.0",
-    "@babel/core": "^7.7.2",
-    "@babel/preset-env": "^7.7.1",
+    "@babel/cli": "^7.7.4",
+    "@babel/core": "^7.7.4",
+    "@babel/preset-env": "^7.7.4",
     "centimaitre": "^1.0.3",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",

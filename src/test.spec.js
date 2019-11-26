@@ -24,7 +24,7 @@ describe('Decrypting Password encrypted MS Office file', () => {
     this.timeout(10000)
     const input = await jetpack.readAsync(wordDoc, 'buffer')
     assert.strictEqual(isOLEDoc(input), true)
-    const output = await decryptOLEDoc(input, () => 'testtest')
+    const output = await decryptOLEDoc(input, 'testtest')
     assert.strictEqual(isOLEDoc(output), false)
   })
 
@@ -32,7 +32,7 @@ describe('Decrypting Password encrypted MS Office file', () => {
     this.timeout(10000)
     const input = await jetpack.readAsync(secretDoc, 'buffer')
     assert.strictEqual(isOLEDoc(input), true)
-    const output = await decryptOLEDoc(input, () => 'testpassword')
+    const output = await decryptOLEDoc(input, 'testpassword')
     assert.strictEqual(isOLEDoc(output), false)
   })
 
@@ -40,7 +40,7 @@ describe('Decrypting Password encrypted MS Office file', () => {
     this.timeout(10000)
     const input = await jetpack.readAsync(excelDoc, 'buffer')
     assert.strictEqual(isOLEDoc(input), true)
-    const output = await decryptOLEDoc(input, () => 'test')
+    const output = await decryptOLEDoc(input, 'test')
     assert.strictEqual(isOLEDoc(output), false)
   })
 
@@ -48,7 +48,7 @@ describe('Decrypting Password encrypted MS Office file', () => {
     this.timeout(10000)
     const input = await jetpack.readAsync(pptDoc, 'buffer')
     assert.strictEqual(isOLEDoc(input), true)
-    const output = await decryptOLEDoc(input, () => 'test')
+    const output = await decryptOLEDoc(input, 'test')
     assert.strictEqual(isOLEDoc(output), false)
   })
 
@@ -56,7 +56,7 @@ describe('Decrypting Password encrypted MS Office file', () => {
     this.timeout(10000)
     const input = await jetpack.readAsync(wordDoc, 'buffer')
     assert.strictEqual(isOLEDoc(input), true)
-    await expect(decryptOLEDoc(input, () => 'testtes')).to.be.rejectedWith(Error).and.eventually.satisfy(error => {
+    await expect(decryptOLEDoc(input, 'testtes')).to.be.rejectedWith(Error).and.eventually.satisfy(error => {
       assert.strictEqual(error.id, 'WA_INVALID_DECRYPTED_FILE')
       assert.strictEqual(error.code, 'INVALID_DECRYPTED_FILE')
       assert.strictEqual(error.message, 'Decrypted file is not a valide OLE document')
@@ -68,7 +68,7 @@ describe('Decrypting Password encrypted MS Office file', () => {
     this.timeout(10000)
     const input = await jetpack.readAsync(nonEncrypted, 'buffer')
     assert.strictEqual(isOLEDoc(input), false)
-    const decryptedBuff = await decryptOLEDoc(input, () => 'testtest')
+    const decryptedBuff = await decryptOLEDoc(input, 'testtest')
     assert.strictEqual(input.equals(decryptedBuff), true)
   })
 })

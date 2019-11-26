@@ -1,9 +1,8 @@
-import { decryptOfficeFile, isOLEDoc } from './ooxml.js'
-import { isZipFile } from './ooxml'
+import { decryptOfficeFile, isOLEDoc, isZipFile } from './ooxml.js'
 import WaxingError from './errors'
 
-const decryptOLEDoc = async (buffer, passwordCallback) => {
-  if (isOLEDoc(buffer)) return decryptOfficeFile(buffer, passwordCallback)
+const decryptOLEDoc = async (buffer, password) => {
+  if (isOLEDoc(buffer)) return decryptOfficeFile(buffer, password)
   else if (isZipFile(buffer)) return buffer
   else throw new WaxingError(WaxingError.INVALID_ENTRY_FILE)
 }

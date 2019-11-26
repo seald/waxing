@@ -1,5 +1,4 @@
 import fileType from 'file-type'
-import struct from 'python-struct'
 import xmldom from 'xmldom'
 import * as ECMA376Agile from './ecma376_agile.js'
 import WaxingError from './errors'
@@ -8,7 +7,7 @@ import OleCompoundDoc from './oleFile'
 // magic bytes that should be at the beginning of every OLE file:
 const MAGIC_BYTES = Buffer.from('\xD0\xCF\x11\xE0\xA1\xB1\x1A\xE1', 'binary')
 
-export const decryptOfficeFile = async (buffer, getPasswordCallback) => {
+export const decryptOfficeFile = async (buffer, password) => {
   try {
     const doc = new OleCompoundDoc(buffer)
     const headerBuffer = await OLEStreamToBuffer(doc, 'EncryptionInfo')
@@ -16,7 +15,6 @@ export const decryptOfficeFile = async (buffer, getPasswordCallback) => {
     if (encryptionType !== 'agile') throw new WaxingError(WaxingError.UNSUPPORTED_ENCRYPTION_INFO)
     const inputBuffer = await OLEStreamToBuffer(doc, 'EncryptedPackage')
     const info = parseInfoAgile(headerBuffer)
-    const password = await getPasswordCallback()
     const outputBuffer = await decrypt(inputBuffer, password, info)
     if (!isZipFile(outputBuffer)) throw new WaxingError(WaxingError.INVALID_DECRYPTED_FILE)
     return outputBuffer
@@ -48,8 +46,8 @@ const OLEStreamToBuffer = (doc, streamName) => {
 }
 
 const parseEncryptionType = (buffer) => {
-  const versionMajor = struct.unpack('<HH', buffer.slice(0, 4))[0]
-  const versionMinor = struct.unpack('<HH', buffer.slice(0, 4))[1]
+  const versionMajor = buffer.readUInt16LE(0)
+  const versionMinor = buffer.readUInt16LE(2)
   if (versionMajor === 4 && versionMinor === 4) return 'agile'
   else return 'unsupported'
 }
