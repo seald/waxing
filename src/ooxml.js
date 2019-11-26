@@ -1,8 +1,8 @@
 import fileType from 'file-type'
 import xmldom from 'xmldom'
-import * as ECMA376Agile from './ecma376_agile.js'
-import WaxingError from './errors'
-import OleCompoundDoc from './oleFile'
+import { makeKeyFromPassword, decrypt } from './ecma376_agile.js'
+import WaxingError from './errors.js'
+import OleCompoundDoc from './oleFile.js'
 
 // magic bytes that should be at the beginning of every OLE file:
 const MAGIC_BYTES = Buffer.from('\xD0\xCF\x11\xE0\xA1\xB1\x1A\xE1', 'binary')
@@ -15,7 +15,7 @@ export const decryptOfficeFile = async (buffer, password) => {
     if (encryptionType !== 'agile') throw new WaxingError(WaxingError.UNSUPPORTED_ENCRYPTION_INFO)
     const inputBuffer = await OLEStreamToBuffer(doc, 'EncryptedPackage')
     const info = parseInfoAgile(headerBuffer)
-    const outputBuffer = await decrypt(inputBuffer, password, info)
+    const outputBuffer = await decrypt(loadKey(password, info), info.keyDataSalt, info.keyDataHashAlgorithm, inputBuffer)
     if (!isZipFile(outputBuffer)) throw new WaxingError(WaxingError.INVALID_DECRYPTED_FILE)
     return outputBuffer
   } catch (error) {
@@ -80,7 +80,7 @@ const parseInfoAgile = (buffer) => {
 }
 
 const loadKey = (password, info) =>
-  ECMA376Agile.makeKeyFromPassword(
+  makeKeyFromPassword(
     password,
     info.passwordSalt,
     info.passwordHashAlgorithm,
@@ -88,5 +88,3 @@ const loadKey = (password, info) =>
     info.spinValue,
     info.passwordKeyBits
   )
-
-const decrypt = async (buffer, password, info) => ECMA376Agile.decrypt(loadKey(password, info), info.keyDataSalt, info.keyDataHashAlgorithm, buffer)

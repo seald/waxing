@@ -14,7 +14,8 @@
     "lint": "standard",
     "build": "rimraf dist/ && babel src/ --out-dir dist/ --copy-files",
     "pretest": "npm run lint && npm run build",
-    "test": "mocha './dist/test.spec.js'"
+    "test": "mocha './dist/test.spec.js'",
+    "prepublishOnly": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,7 @@
   "author": "Seald",
   "license": "MIT",
   "dependencies": {
+    "event-stream": "^4.0.1",
     "file-type": "^12.4.0",
     "node-forge": "^0.9.1",
     "xmldom": "^0.1.27"

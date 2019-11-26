@@ -1,17 +1,19 @@
 /* eslint-env mocha */
 import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
-import { isOLEDoc, decryptOLEDoc } from './index'
+import { isOLEDoc, decryptOLEDoc } from './index.js'
 import jetpack from 'fs-jetpack'
 
 chai.use(chaiAsPromised)
 
 const { expect, assert } = chai
 
-describe('Decrypting Password encrypted MS Office file', () => {
+describe('Decrypting Password encrypted MS Office file', function () {
+  this.timeout(10000)
+
   let testResources, wordDoc, excelDoc, pptDoc, nonEncrypted, secretDoc
 
-  before('initialize', () => {
+  before('initialize', function () {
     testResources = jetpack.dir('test_resources')
     secretDoc = testResources.path('secret.docx')
     wordDoc = testResources.path('encrypted.docx')
@@ -21,7 +23,6 @@ describe('Decrypting Password encrypted MS Office file', () => {
   })
 
   it('Ole file (Word) with right password', async function () {
-    this.timeout(10000)
     const input = await jetpack.readAsync(wordDoc, 'buffer')
     assert.strictEqual(isOLEDoc(input), true)
     const output = await decryptOLEDoc(input, 'testtest')
@@ -29,7 +30,6 @@ describe('Decrypting Password encrypted MS Office file', () => {
   })
 
   it('Ole file long password (test key padding)', async function () {
-    this.timeout(10000)
     const input = await jetpack.readAsync(secretDoc, 'buffer')
     assert.strictEqual(isOLEDoc(input), true)
     const output = await decryptOLEDoc(input, 'testpassword')
@@ -37,7 +37,6 @@ describe('Decrypting Password encrypted MS Office file', () => {
   })
 
   it('Ole file (Excel) with right password', async function () {
-    this.timeout(10000)
     const input = await jetpack.readAsync(excelDoc, 'buffer')
     assert.strictEqual(isOLEDoc(input), true)
     const output = await decryptOLEDoc(input, 'test')
@@ -45,7 +44,6 @@ describe('Decrypting Password encrypted MS Office file', () => {
   })
 
   it('Ole file (PowerPoint) with right password', async function () {
-    this.timeout(10000)
     const input = await jetpack.readAsync(pptDoc, 'buffer')
     assert.strictEqual(isOLEDoc(input), true)
     const output = await decryptOLEDoc(input, 'test')
@@ -53,7 +51,6 @@ describe('Decrypting Password encrypted MS Office file', () => {
   })
 
   it('Ole file (Word) with wrong password', async function () {
-    this.timeout(10000)
     const input = await jetpack.readAsync(wordDoc, 'buffer')
     assert.strictEqual(isOLEDoc(input), true)
     await expect(decryptOLEDoc(input, 'testtes')).to.be.rejectedWith(Error).and.eventually.satisfy(error => {
@@ -65,7 +62,6 @@ describe('Decrypting Password encrypted MS Office file', () => {
   })
 
   it('Not an Ole file', async function () {
-    this.timeout(10000)
     const input = await jetpack.readAsync(nonEncrypted, 'buffer')
     assert.strictEqual(isOLEDoc(input), false)
     const decryptedBuff = await decryptOLEDoc(input, 'testtest')

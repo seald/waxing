@@ -1,3 +1,7 @@
+/*
+Inspired by node-ole-doc, Copyright (c) 2012 Chris Geiersbach
+https://github.com/atariman486/node-ole-doc
+*/
 import es from 'event-stream'
 
 class Header {
@@ -75,7 +79,7 @@ class DirectoryTree {
       const nameLength = Math.max(buffer.readInt16LE(64 + offset) - 1, 0)
 
       const entry = {}
-      entry.name = buffer.toString('utf16le', 0 + offset, nameLength + offset)
+      entry.name = buffer.slice(offset, nameLength + offset).toString('utf16le')
       entry.type = buffer.readInt8(66 + offset)
       entry.nodeColor = buffer.readInt8(67 + offset)
       entry.left = buffer.readInt32LE(68 + offset)
