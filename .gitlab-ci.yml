@@ -11,15 +11,7 @@ test:
   stage: test
   script:
     - npm run test
-  artifacts:
+  cache:
+    key: "waxing" # universal cache
     paths:
-      - dist/
-
-deploy:
-  stage: deploy
-  script:
-    - npm run build
-    - npm publish
-  only:
-    - tags
-  allow_failure: false
+      - /root/.npm
