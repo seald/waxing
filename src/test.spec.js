@@ -29,6 +29,19 @@ describe('Decrypting Password encrypted MS Office file', function () {
     assert.strictEqual(isOLEDoc(output), false)
   })
 
+  it('Ole file (Word) with right password when buffer is polyfilled', async function () {
+    const BufferNode = Buffer
+    global.Buffer = require('buffer/').Buffer
+    try {
+      const input = await jetpack.readAsync(wordDoc, 'buffer')
+      assert.strictEqual(isOLEDoc(input), true)
+      const output = await decryptOLEDoc(input, 'testtest')
+      assert.strictEqual(isOLEDoc(output), false)
+    } finally {
+      global.Buffer = BufferNode
+    }
+  })
+
   it('Ole file long password (test key padding)', async function () {
     const input = await jetpack.readAsync(secretDoc, 'buffer')
     assert.strictEqual(isOLEDoc(input), true)

@@ -23,8 +23,19 @@ export const decryptOfficeFile = async (buffer, password) => {
     else throw error
   }
 }
+/**
+ * To workaround https://github.com/feross/buffer/issues/251 when Buffer is polyfilled in the browser
+ * @param bytes
+ * @returns {*}
+ */
+export const sliceOddLengthBuffer = bytes => {
+  const length = bytes.length
+  return length % 2 === 0 ? bytes : bytes.slice(0, length - 1)
+}
 
-export const isOLEDoc = (buffer) => buffer.slice(0, MAGIC_BYTES.length).equals(MAGIC_BYTES)
+// Re-do Buffer.from on MAGIC_BYTES only because tests load buffer polyfill dynamically and it causes errors if Buffer
+// implementation is different when requiring and when executing, very ugly I know
+export const isOLEDoc = (buffer) => buffer.slice(0, Buffer.from(MAGIC_BYTES).length).equals(Buffer.from(MAGIC_BYTES))
 
 export const isZipFile = (buffer) => {
   const fileExt = fileType(buffer)
