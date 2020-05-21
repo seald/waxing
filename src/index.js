@@ -3,7 +3,7 @@ import WaxingError from './errors.js'
 
 const decryptOLEDoc = async (buffer, password) => {
   if (isOLEDoc(buffer)) return decryptOfficeFile(buffer, password)
-  else if (isZipFile(buffer)) return buffer
+  else if (await isZipFile(buffer)) return buffer
   else throw new WaxingError(WaxingError.INVALID_ENTRY_FILE)
 }
 
