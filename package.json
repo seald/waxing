@@ -11,11 +11,15 @@
     "!src/*.spec.js"
   ],
   "scripts": {
-    "lint": "standard",
-    "build": "rimraf dist/ && babel src/ --out-dir dist/ --copy-files",
-    "pretest": "npm run lint && npm run build",
-    "test": "mocha './dist/test.spec.js'",
-    "prepublishOnly": "npm run build"
+    "prebuild": "rimraf dist/",
+    "build": "babel src/ --out-dir dist/ --copy-files",
+    "pretest": "standard && npm run build",
+    "test": "mocha './dist/test.spec.js' --require source-map-support/register --timeout 30000",
+    "prepare": "npm run build",
+    "pretest-report": "npm run pretest",
+    "test-report": "mocha --require source-map-support/register --reporter mocha-multi-reporters --reporter-options configFile=./mochaReportConfig.json './dist/test.spec.js'",
+    "precoverage": "rimraf coverage/",
+    "coverage": "nyc npm run test-report"
   },
   "repository": {
     "type": "git",
@@ -25,21 +29,25 @@
   "license": "MIT",
   "dependencies": {
     "event-stream": "^4.0.1",
-    "file-type": "^12.4.0",
+    "file-type": "^14.5.0",
     "node-forge": "^0.9.1",
-    "xmldom": "^0.1.27"
+    "xmldom": "^0.3.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.7.4",
-    "@babel/core": "^7.7.4",
-    "@babel/preset-env": "^7.7.4",
-    "centimaitre": "^1.0.3",
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.6",
+    "@babel/preset-env": "^7.9.6",
+    "buffer": "^5.6.0",
+    "centimaitre": "^1.0.4",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
-    "fs-jetpack": "^2.2.3",
-    "mocha": "^6.2.2",
-    "nyc": "^14.1.1",
-    "rimraf": "^3.0.0",
-    "standard": "^14.3.1"
+    "fs-jetpack": "^2.4.0",
+    "mocha": "^7.2.0",
+    "mocha-junit-reporter": "^1.23.3",
+    "mocha-multi-reporters": "^1.1.7",
+    "nyc": "^15.0.1",
+    "rimraf": "^3.0.2",
+    "source-map-support": "^0.5.19",
+    "standard": "^14.3.4"
   }
 }

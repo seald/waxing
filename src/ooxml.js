@@ -16,7 +16,7 @@ export const decryptOfficeFile = async (buffer, password) => {
     const inputBuffer = await OLEStreamToBuffer(doc, 'EncryptedPackage')
     const info = parseInfoAgile(headerBuffer)
     const outputBuffer = await decrypt(loadKey(password, info), info.keyDataSalt, info.keyDataHashAlgorithm, inputBuffer)
-    if (!isZipFile(outputBuffer)) throw new WaxingError(WaxingError.INVALID_DECRYPTED_FILE)
+    if (!(await isZipFile(outputBuffer))) throw new WaxingError(WaxingError.INVALID_DECRYPTED_FILE)
     return outputBuffer
   } catch (error) {
     if (error.message === 'Not a valid compound document.' || error.message === 'Invalid Short Sector Allocation Table') throw new WaxingError(WaxingError.INVALID_COMPOUND_FILE)
@@ -24,10 +24,12 @@ export const decryptOfficeFile = async (buffer, password) => {
   }
 }
 
-export const isOLEDoc = (buffer) => buffer.slice(0, MAGIC_BYTES.length).equals(MAGIC_BYTES)
+// Re-do Buffer.from on MAGIC_BYTES only because tests load buffer polyfill dynamically and it causes errors if Buffer
+// implementation is different when requiring and when executing, very ugly I know
+export const isOLEDoc = (buffer) => buffer.slice(0, MAGIC_BYTES.length).equals(Buffer.from(MAGIC_BYTES))
 
-export const isZipFile = (buffer) => {
-  const fileExt = fileType(buffer)
+export const isZipFile = async (buffer) => {
+  const fileExt = await fileType.fromBuffer(buffer)
   return Boolean(fileExt) && ['docx', 'xlsx', 'pptx', 'zip'].includes(fileExt.ext)
 }
 
