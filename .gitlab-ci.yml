@@ -17,7 +17,7 @@ test:
   script:
     - npm run coverage
   artifacts:
-    name: "png2icon_coverage_${CI_BUILD_ID}_${CI_BUILD_REF}"
+    name: "waxing_coverage_${CI_BUILD_ID}_${CI_BUILD_REF}"
     when: always
     expire_in: 6 mos
     reports:
