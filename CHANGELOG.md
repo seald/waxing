@@ -1,4 +1,4 @@
-# 0.2.1 2020-05-XX
+# 0.2.1 2020-05-25
 - Workaround Buffer polyfill bug for usage in browser https://github.com/feross/buffer/issues/251
 - Update dependencies
 

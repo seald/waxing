@@ -9,7 +9,7 @@ chai.use(chaiAsPromised)
 const { expect, assert } = chai
 
 describe('Decrypting Password encrypted MS Office file', function () {
-  this.timeout(10000)
+  this.timeout(30000)
 
   let testResources, wordDoc, excelDoc, pptDoc, nonEncrypted, secretDoc
 
