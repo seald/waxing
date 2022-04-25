@@ -1,5 +1,5 @@
 import fileType from 'file-type'
-import xmldom from 'xmldom'
+import xmldom from '@xmldom/xmldom'
 import { makeKeyFromPassword, decrypt } from './ecma376_agile.js'
 import WaxingError from './errors.js'
 import OleCompoundDoc from './oleFile.js'
@@ -56,8 +56,7 @@ const parseEncryptionType = (buffer) => {
 
 const parseInfoAgile = (buffer) => {
   const stringBuffer = buffer.toString('utf8')
-  const Parser = xmldom.DOMParser
-  const xml = new Parser().parseFromString(stringBuffer, 'text/xml')
+  const xml = new xmldom.DOMParser().parseFromString(stringBuffer, 'text/xml')
   const keyDataSalt = Buffer.from(xml.getElementsByTagName('keyData')[0].getAttribute('saltValue'), 'base64').toString('binary')
   const keyDataHashAlgorithm = xml.getElementsByTagName('keyData')[0].getAttribute('hashAlgorithm')
   const passwordNode = xml.getElementsByTagNameNS('http://schemas.microsoft.com/office/2006/keyEncryptor/password', 'encryptedKey')[0]
